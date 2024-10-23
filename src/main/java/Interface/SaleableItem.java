@@ -2,7 +2,7 @@ package Interface;
 
 // SaleableItem interface
 public interface SaleableItem {
-    void sellCopy();
+    short sellCopy();
     Double getBrand(); // Should return the brand name
     double getPrice();
 }

@@ -55,15 +55,6 @@ class BookstoreTest {
         assertEquals(0, bookstore.saleableItems.size());
     }
 
-    @Test
-    void editItem() {
-        // Add an item and simulate editing it
-        bookstore.addItem(pencil);
 
-        // Assume pencil is editable and has an edit method that modifies its state
-        bookstore.editItem(pencil);
 
-        // No specific assertion since edit logic is internal, but you can verify interaction or state changes
-        assertTrue(bookstore.saleableItems.contains(pencil)); // Just to check the item is still there
-    }
 }

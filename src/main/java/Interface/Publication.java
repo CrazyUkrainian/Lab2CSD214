@@ -57,12 +57,13 @@ public abstract class Publication extends Editable implements SaleableItem {
     }
 
     // Method to sell a copy
-    public void sellCopy() {
+    public short sellCopy() {
         if (copies > 0) {
             copies--;
         } else {
             System.out.println("Out of stock.");
         }
+        return 0;
     }
 
     @Override

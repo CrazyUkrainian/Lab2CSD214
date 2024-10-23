@@ -25,9 +25,10 @@ public abstract class Pencil extends Publication {
     }
 
     @Override
-    public void sellCopy() {
+    public short sellCopy() {
         super.sellCopy(); // Call the sellCopy from Publication
         System.out.println("Pencil sold: " + brand);
+        return 0;
     }
 
     @Override

@@ -44,13 +44,14 @@ public abstract class Ticket extends Editable implements SaleableItem {
     }
 
     @Override
-    public void sellCopy() {
+    public short sellCopy() {
         if (quantity > 0) {
             quantity--;
             System.out.println("Ticket sold: " + description);
         } else {
             System.out.println("No more tickets available.");
         }
+        return 0;
     }
 
     @Override
