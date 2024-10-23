@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Bookstore {
-    private final ArrayList<SaleableItem> saleableItems = new ArrayList<>();
+    public ArrayList<SaleableItem> saleableItems = new ArrayList<>();
     private final CashTill cashTill = CashTill.getInstance();
     private final Scanner scanner = new Scanner(System.in);
 

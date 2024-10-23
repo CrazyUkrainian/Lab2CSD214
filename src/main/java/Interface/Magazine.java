@@ -9,7 +9,7 @@ public abstract class Magazine extends Publication {
     private String isbn13; // Add isbn13 as an attribute
 
     // Default constructor
-    public Magazine(String title, double price, int copies, int orderQty) {
+    public Magazine(String title, double price, int copies, String tech, int orderQty) {
         this.currIssue = new Date(); // Set to the current date by default
     }
 

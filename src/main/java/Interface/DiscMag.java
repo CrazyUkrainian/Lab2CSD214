@@ -5,7 +5,7 @@ public abstract class DiscMag extends Magazine {
 
     // Constructor with parameters for title, price, copies, orderQty, and hasDisc
     public DiscMag(String title, double price, int copies, int orderQty, boolean hasDisc) {
-        super(title, price, copies, orderQty); // Call the superclass constructor
+        super(title, price, copies, "Tech", orderQty); // Call the superclass constructor
         this.hasDisc = hasDisc;
     }
 
