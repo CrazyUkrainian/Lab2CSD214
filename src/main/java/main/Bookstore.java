@@ -86,7 +86,9 @@ public class Bookstore {
             System.out.println("1. Books");
             System.out.println("2. Tickets");
             System.out.println("3. Magazines"); // New option for Magazines
-            System.out.println("4. Exit");
+            System.out.println("4. Pencil Operations");
+            System.out.println("5. Disc Magazine Operations");
+            System.out.println("6. Exit");
             System.out.println("--------------------------------------------------------------");
             System.out.print("Choose an option: ");
             int mainChoice = scanner.nextInt();
@@ -103,6 +105,12 @@ public class Bookstore {
                     magazinesMenu(); // Call magazines menu
                     break;
                 case 4:
+                    pencilMenu(); // Call magazines menu
+                    break;
+                case 5:
+                    displayMenu(); // Call magazines menu
+                    break;
+                case 6:
                     running = false;
                     System.out.println("Bye..");
                     break;
@@ -192,17 +200,31 @@ public class Bookstore {
 
         while (running) {
             System.out.println("\n-------------------------Tickets---------------------------------");
-            System.out.println("1. Sell a Ticket");
-            System.out.println("2. Exit");
+            viewItems(); // Show all items, including tickets
+            System.out.println("--------------------------------------------------------------");
+            System.out.println("1. Add a Ticket");
+            System.out.println("2. Edit a Ticket");
+            System.out.println("3. Delete a Ticket");
+            System.out.println("4. Sell a Ticket");
+            System.out.println("5. Quit");
             System.out.print("Choose an option: ");
             int ticketChoice = scanner.nextInt();
             scanner.nextLine(); // Consume newline
 
             switch (ticketChoice) {
                 case 1:
-                    sellTicket();
+                    addTicket();
                     break;
                 case 2:
+                    editTicket();
+                    break;
+                case 3:
+                    deleteTicket();
+                    break;
+                case 4:
+                    sellTicket();
+                    break;
+                case 5:
                     running = false;
                     break;
                 default:
@@ -210,6 +232,71 @@ public class Bookstore {
             }
         }
     }
+
+    private void addTicket() {
+        System.out.print("Enter Ticket Description ('q' to quit): ");
+        String description = scanner.nextLine();
+        if (description.equalsIgnoreCase("q")) return;
+
+        System.out.print("Quantity to Order: ");
+        int quantity = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        System.out.print("Price: ");
+        double price = scanner.nextDouble();
+        scanner.nextLine(); // Consume newline
+
+        // Create a new Ticket and add it to the store
+        SaleableItem ticket = new Ticket(description, price, quantity) {
+            @Override
+            public Double getBrand() {
+                return 0.0;
+            }
+        };
+        addItem(ticket);
+        System.out.println("Ticket added successfully.");
+    }
+
+    private void editTicket() {
+        viewItems(); // Show items to choose from
+        System.out.print("Enter the index of the ticket to edit: ");
+        int index = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        if (index < 1 || index > saleableItems.size()) {
+            System.out.println("Invalid index.");
+            return;
+        }
+
+        SaleableItem itemToEdit = saleableItems.get(index - 1);
+        if (itemToEdit instanceof Ticket) {
+            editItem(itemToEdit);
+            System.out.println("Ticket edited successfully.");
+        } else {
+            System.out.println("Selected item is not a ticket.");
+        }
+    }
+
+    private void deleteTicket() {
+        viewItems(); // Show items to choose from
+        System.out.print("Enter the index of the ticket to delete: ");
+        int index = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        if (index < 1 || index > saleableItems.size()) {
+            System.out.println("Invalid index.");
+            return;
+        }
+
+        SaleableItem itemToDelete = saleableItems.get(index - 1);
+        if (itemToDelete instanceof Ticket) {
+            removeItem(itemToDelete);
+            System.out.println("Ticket deleted successfully.");
+        } else {
+            System.out.println("Selected item is not a ticket.");
+        }
+    }
+
 
     private void editBook() {
         viewItems(); // Show items to choose from
@@ -334,7 +421,340 @@ public class Bookstore {
     }
 
     private void sellTicket() {
-        // Implement logic for selling a ticket here
-        System.out.println("Ticket sold successfully."); // Placeholder
+        // Display only tickets from saleableItems
+        ArrayList<SaleableItem> ticketItems = new ArrayList<>();
+        for (SaleableItem item : saleableItems) {
+            if (item instanceof Ticket) {
+                ticketItems.add(item);
+            }
+        }
+
+        if (ticketItems.isEmpty()) {
+            System.out.println("No tickets available to sell.");
+            return;
+        }
+
+        // Display tickets to the user
+        for (int i = 0; i < ticketItems.size(); i++) {
+            System.out.println((i + 1) + ". " + ticketItems.get(i));
+        }
+
+        System.out.print("Enter the index of the ticket to sell: ");
+        int index = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        // Validate the index input
+        if (index < 1 || index > ticketItems.size()) {
+            System.out.println("Invalid index.");
+            return;
+        }
+
+        // Sell the ticket
+        SaleableItem itemToSell = ticketItems.get(index - 1);
+        sellItem(itemToSell);
+        System.out.println("Ticket sold successfully.");
     }
+
+    public void pencilMenu() {
+        int choice;
+        do {
+            System.out.println("\n--- Pencil Menu ---");
+            System.out.println("1. Add Pencil");
+            System.out.println("2. Edit Pencil");
+            System.out.println("3. Delete Pencil");
+            System.out.println("4. Sell Pencil");
+            System.out.println("5. View All Items");
+            System.out.println("6. Exit");
+
+            choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            switch (choice) {
+                case 1:
+                    addPencil();
+                    break;
+                case 2:
+                    editPencil();
+                    break;
+                case 3:
+                    deletePencil();
+                    break;
+                case 4:
+                    sellPencil();
+                    break;
+                case 5:
+                    viewItems();
+                    break;
+                case 6:
+                    System.out.println("Exiting pencil menu.");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        } while (choice != 6);
+    }
+
+    private void addPencil() {
+        System.out.print("Enter Pencil Brand ('q' to quit): ");
+        String brand = scanner.nextLine();
+        if (brand.equalsIgnoreCase("q")) return;
+
+        System.out.print("Enter Pencil Title: ");
+        String title = scanner.nextLine();
+
+        System.out.print("Quantity to Order: ");
+        int copies = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        System.out.print("Price: ");
+        double price = scanner.nextDouble();
+        scanner.nextLine(); // Consume newline
+
+        System.out.print("ISBN10: ");
+        String isbn10 = scanner.nextLine(); // Capture ISBN10 input
+
+        // Create a new Pencil and add it to the store
+        SaleableItem pencil = new Pencil(brand, title, price, copies, isbn10) {
+            @Override
+            public Double getBrand() {
+                return 0.0;
+            }
+        }; // Assuming Pencil implements SaleableItem
+        saleableItems.add(pencil);
+        System.out.println("Pencil added successfully.");
+    }
+
+
+    private void editPencil() {
+        viewItems(); // Display items
+        System.out.print("Enter the index of the pencil to edit: ");
+        int index = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        if (index < 1 || index > saleableItems.size()) {
+            System.out.println("Invalid index.");
+            return;
+        }
+
+        SaleableItem itemToEdit = saleableItems.get(index - 1);
+        if (itemToEdit instanceof Pencil) {
+            ((Pencil) itemToEdit).edit();
+            System.out.println("Pencil edited successfully.");
+        } else {
+            System.out.println("Selected item is not a pencil.");
+        }
+    }
+    private void deletePencil() {
+        viewItems(); // Display items
+        System.out.print("Enter the index of the pencil to delete: ");
+        int index = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        if (index < 1 || index > saleableItems.size()) {
+            System.out.println("Invalid index.");
+            return;
+        }
+
+        SaleableItem itemToDelete = saleableItems.get(index - 1);
+        if (itemToDelete instanceof Pencil) {
+            saleableItems.remove(index - 1);
+            System.out.println("Pencil deleted successfully.");
+        } else {
+            System.out.println("Selected item is not a pencil.");
+        }
+    }
+
+    private void sellPencil() {
+        viewItems(); // Show items to choose from
+        System.out.print("Enter the index of the pencil to sell: ");
+        int index = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        if (index < 1 || index > saleableItems.size()) {
+            System.out.println("Invalid index.");
+            return;
+        }
+
+        SaleableItem itemToSell = saleableItems.get(index - 1);
+        if (itemToSell instanceof Pencil) {
+            sellItem(itemToSell);
+            System.out.println("Pencil sold successfully.");
+        } else {
+            System.out.println("Selected item is not a pencil.");
+        }
+    }
+
+    private void displayMenu() {
+        int choice;
+        do {
+            System.out.println("1. Add Disc Magazine");
+            System.out.println("2. Edit Disc Magazine");
+            System.out.println("3. Delete Disc Magazine");
+            System.out.println("4. Sell Disc Magazine");
+            System.out.println("5. View Disc Magazines");
+            System.out.println("0. Exit");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            switch (choice) {
+                case 1:
+                    addDiscMag();
+                    break;
+                case 2:
+                    editDiscMag();
+                    break;
+                case 3:
+                    deleteDiscMag();
+                    break;
+                case 4:
+                    sellDiscMag();
+                    break;
+                case 5:
+                    viewDiscMags();
+                    break;
+                case 0:
+                    System.out.println("Exiting the system.");
+                    break;
+                default:
+                    System.out.println("Invalid choice, please try again.");
+            }
+        } while (choice != 0);
+    }
+
+    private void addDiscMag() {
+        System.out.print("Enter Disc Magazine Title ('q' to quit): ");
+        String title = scanner.nextLine();
+        if (title.equalsIgnoreCase("q")) return;
+
+        System.out.print("Quantity to Order: ");
+        int copies = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        System.out.print("Price: ");
+        double price = scanner.nextDouble();
+        scanner.nextLine(); // Consume newline
+
+        System.out.print("Order Quantity: ");
+        int orderQty = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        System.out.print("Does it have a disc? (true/false): ");
+        boolean hasDisc = scanner.nextBoolean();
+        scanner.nextLine(); // Consume newline
+
+        // Create a new DiscMag and add it to the store
+        SaleableItem discMag = new DiscMag(title, price, copies, orderQty, hasDisc) {
+            @Override
+            public Double getBrand() {
+                return 0.0; // Just a placeholder, adjust based on your implementation
+            }
+        }; // Assuming DiscMag implements SaleableItem
+        saleableItems.add(discMag);
+        System.out.println("Disc Magazine added successfully.");
+    }
+
+    private void editDiscMag() {
+        viewItems(); // Display items
+        System.out.print("Enter the index of the Disc Magazine to edit: ");
+        int index = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        if (index < 1 || index > saleableItems.size()) {
+            System.out.println("Invalid index.");
+            return;
+        }
+
+        SaleableItem itemToEdit = saleableItems.get(index - 1);
+        if (itemToEdit instanceof DiscMag) {
+            DiscMag discMag = (DiscMag) itemToEdit;
+
+            System.out.print("Enter new Title: ");
+            String newTitle = scanner.nextLine();
+            discMag.setTitle(newTitle);
+
+            System.out.print("Enter new Price: ");
+            double newPrice = scanner.nextDouble();
+            scanner.nextLine(); // Consume newline
+            discMag.setPrice(newPrice);
+
+            System.out.print("Enter new Quantity: ");
+            int newCopies = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+            discMag.setCopies(newCopies);
+
+            System.out.print("Enter new Order Quantity: ");
+            int newOrderQty = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+            discMag.setOrderQty(newOrderQty);
+
+            System.out.print("Does it have a disc? (true/false): ");
+            boolean hasDisc = scanner.nextBoolean();
+            scanner.nextLine(); // Consume newline
+            discMag.setHasDisc(hasDisc);
+
+            System.out.println("Disc Magazine edited successfully.");
+        } else {
+            System.out.println("Selected item is not a Disc Magazine.");
+        }
+    }
+    private void deleteDiscMag() {
+        viewItems(); // Display items
+        System.out.print("Enter the index of the Disc Magazine to delete: ");
+        int index = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        if (index < 1 || index > saleableItems.size()) {
+            System.out.println("Invalid index.");
+            return;
+        }
+
+        SaleableItem itemToDelete = saleableItems.get(index - 1);
+        if (itemToDelete instanceof DiscMag) {
+            saleableItems.remove(itemToDelete);
+            System.out.println("Disc Magazine deleted successfully.");
+        } else {
+            System.out.println("Selected item is not a Disc Magazine.");
+        }
+    }
+
+    private void sellDiscMag() {
+        viewItems(); // Display items
+        System.out.print("Enter the index of the Disc Magazine to sell: ");
+        int index = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        if (index < 1 || index > saleableItems.size()) {
+            System.out.println("Invalid index.");
+            return;
+        }
+
+        SaleableItem itemToSell = saleableItems.get(index - 1);
+        if (itemToSell instanceof DiscMag) {
+            // Assuming you have a sell logic, adjust based on your app's sale process
+            DiscMag discMag = (DiscMag) itemToSell;
+            if (discMag.getCopies() > 0) {
+                discMag.setCopies(discMag.getCopies() - 1); // Reduce the number of copies
+                System.out.println("Disc Magazine sold successfully.");
+            } else {
+                System.out.println("No copies available to sell.");
+            }
+        } else {
+            System.out.println("Selected item is not a Disc Magazine.");
+        }
+    }
+    private void viewDiscMags() {
+        System.out.println("Disc Magazines:");
+        for (int i = 0; i < saleableItems.size(); i++) {
+            SaleableItem item = saleableItems.get(i);
+            if (item instanceof DiscMag) {
+                System.out.println((i + 1) + ". " + item); // Display DiscMag items
+            }
+        }
+    }
+
+
+
+
+
 }

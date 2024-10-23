@@ -1,26 +1,13 @@
-/*package Interface;
+package Interface;
 
 public abstract class DiscMag extends Magazine {
     private boolean hasDisc;
 
-    // Default constructor
-    public DiscMag() {
-        super(title, price, copies, orderQty); // Call the superclass constructor
-        this.hasDisc = false; // Default value
-    }
-
-    // Constructor with the 'hasDisc' parameter
-    public DiscMag(boolean hasDisc) {
+    // Constructor with parameters for title, price, copies, orderQty, and hasDisc
+    public DiscMag(String title, double price, int copies, int orderQty, boolean hasDisc) {
         super(title, price, copies, orderQty); // Call the superclass constructor
         this.hasDisc = hasDisc;
     }
-
-    // Constructor with parameters for title, price, copies, and hasDisc
-    public DiscMag(String title, double price, int copies, boolean hasDisc, int orderQty) {
-        super(title, price, copies, orderQty); // This should now work correctly
-        this.hasDisc = hasDisc;
-    }
-
 
     @Override
     public void edit() {
@@ -44,10 +31,9 @@ public abstract class DiscMag extends Magazine {
         setHasDisc(getInputBoolean("Does it have a disc? (true/false): "));
     }
 
-
     @Override
     public String toString() {
-        return super.toString() + ", Has Disc: " + hasDisc;
+        return super.toString() + ", Has Disc: " + (hasDisc ? "Yes" : "No");
     }
 
     // Getter and Setter for hasDisc
@@ -59,4 +45,3 @@ public abstract class DiscMag extends Magazine {
         this.hasDisc = hasDisc;
     }
 }
-*/
